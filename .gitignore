@@ -67,6 +67,9 @@ fit-dtb.blob*
 #
 /spl/
 /tpl/
+/fit/
+/tools/bmp2gray16
+/tools/resource_tool
 /defconfig
 /generated_defconfig
 /Test*
