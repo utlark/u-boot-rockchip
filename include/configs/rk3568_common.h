@@ -32,6 +32,8 @@
 	"partitions=" PARTS_DEFAULT	\
 	ENV_MEM_LAYOUT_SETTINGS		\
 	ROCKCHIP_DEVICE_SETTINGS	\
-	"boot_targets=" BOOT_TARGETS "\0"
+	"boot_targets=" BOOT_TARGETS "\0"	\
+	"bootcmd=bootrk\0"			\
+	"autobootdelay=3\0"
 
 #endif /* __CONFIG_RK3568_COMMON_H */

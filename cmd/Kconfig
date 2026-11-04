@@ -362,6 +362,14 @@ config CMD_BOOTI
 	help
 	  Boot an AArch64 Linux Kernel image from memory.
 
+config CMD_BOOTRK
+	bool "bootrk"
+	default n
+	help
+	  Boot a Rockchip-format kernel image (8-byte tag/size header)
+	  from the "kernel" partition, with the DTB taken from the
+	  "resource" partition.
+
 config CMD_BOOT_ANDROID
 	bool "boot_android"
 	default y
