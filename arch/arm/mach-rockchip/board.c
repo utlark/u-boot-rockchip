@@ -70,7 +70,7 @@ __weak bool rk_board_req_mem_layout1(void)
 	return gd->ram_size <= SZ_128M;
 }
 
-#if !defined(CONFIG_DM_USB_GADGET)
+#if defined(CONFIG_USB_GADGET) && !defined(CONFIG_DM_USB_GADGET)
 __weak int rkusb_dev_bind_to_udc_data(struct udevice *dev)
 {
 	return 0;

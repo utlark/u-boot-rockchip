@@ -89,7 +89,7 @@ static int initr_of_live(void)
 	return 0;
 }
 
-#if !defined(CONFIG_DM_USB_GADGET)
+#if defined(CONFIG_USB_GADGET) && !defined(CONFIG_DM_USB_GADGET)
 __weak int rkusb_dev_bind_to_udc_data(struct udevice *dev)
 {
 	return 0;
