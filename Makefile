@@ -1520,6 +1520,17 @@ MKIMAGEFLAGS_u-boot.itb = -E
 endif
 MKIMAGEFLAGS_u-boot.itb += -B 0x200
 
+# Boards with more complex image requirements can provide an .its source file
+# or a generator script
+ifneq ($(CONFIG_SPL_FIT_SOURCE),"")
+U_BOOT_ITS = $(subst ",,$(CONFIG_SPL_FIT_SOURCE))
+else
+ifneq ($(CONFIG_SPL_FIT_GENERATOR),"")
+U_BOOT_ITS := u-boot.its
+$(U_BOOT_ITS): FORCE
+	$(srctree)/$(CONFIG_SPL_FIT_GENERATOR) > $@
+endif
+endif
 
 ifdef U_BOOT_ITS
 u-boot.itb: u-boot-nodtb.bin \

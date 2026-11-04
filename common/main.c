@@ -83,3 +83,12 @@ void main_loop(void)
 
 	panic("No CLI available");
 }
+
+/*
+ * Miscellaneous platform-dependent init, called from board_init_r().
+ * Boards may override this.
+ */
+__weak int misc_init_r(void)
+{
+	return 0;
+}

@@ -23,18 +23,6 @@ DECLARE_GLOBAL_DATA_PTR;
 
 extern struct bootm_headers images;
 
-static int bootm_image_populate_dtb(void *img)
-{
-	ulong fdt_addr_r = env_get_ulong("fdt_addr_r", 16, 0);
-
-	if ((gd->flags & GD_FLG_KDTB_READY) && gd->fdt_blob == (void *)fdt_addr_r)
-		sysmem_free((phys_addr_t)gd->fdt_blob);
-	else
-		gd->fdt_blob = (void *)fdt_addr_r;
-
-	return rockchip_ram_read_dtb_file(img, (void *)gd->fdt_blob);
-}
-
 /*
  * Implement it to support CLI command:
  *   - Android: bootm [aosp addr]
@@ -50,6 +38,19 @@ static int bootm_image_populate_dtb(void *img)
 #if defined(CONFIG_ANDROID_BOOT_IMAGE) ||	\
 	defined(CONFIG_ROCKCHIP_FIT_IMAGE) ||	\
 	defined(CONFIG_ROCKCHIP_UIMAGE)
+
+static int bootm_image_populate_dtb(void *img)
+{
+	ulong fdt_addr_r = env_get_ulong("fdt_addr_r", 16, 0);
+
+	if ((gd->flags & GD_FLG_KDTB_READY) && gd->fdt_blob == (void *)fdt_addr_r)
+		sysmem_free((phys_addr_t)gd->fdt_blob);
+	else
+		gd->fdt_blob = (void *)fdt_addr_r;
+
+	return rockchip_ram_read_dtb_file(img, (void *)gd->fdt_blob);
+}
+
 int board_do_bootm(int argc, char * const argv[])
 {
 	int format;

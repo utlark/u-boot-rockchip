@@ -311,7 +311,7 @@ function select_toolchain()
 			if grep -q '^CONFIG_RISCV=y' .config ; then
 				CROSS_COMPILE_RISCV=$(cd `dirname ${CROSS_COMPILE_RISCV}`; pwd)"/riscv64-unknown-linux-musl-"
 			elif grep -q '^CONFIG_ARM64=y' .config ; then
-				CROSS_COMPILE_ARM64=$(cd `dirname ${CROSS_COMPILE_ARM64}`; pwd)"/aarch64-none-linux-gnu-"
+				CROSS_COMPILE_ARM64=/usr/bin/aarch64-linux-gnu-
 			else
 				CROSS_COMPILE_ARM32=$(cd `dirname ${CROSS_COMPILE_ARM32}`; pwd)"/arm-none-linux-gnueabihf-"
 			fi
