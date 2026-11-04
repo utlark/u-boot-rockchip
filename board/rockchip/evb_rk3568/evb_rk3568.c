@@ -5,6 +5,7 @@
 
 #include <common.h>
 #include <dwc3-uboot.h>
+#include <linux/err.h>
 #include <usb.h>
 #include <asm/io.h>
 
@@ -19,8 +20,17 @@ static struct dwc3_device dwc3_device_data = {
 	.dis_u2_susphy_quirk = 1,
 };
 
+int rkusb_dev_bind_to_udc_data(struct udevice *dev)
+{
+	if (IS_ERR_OR_NULL(dev))
+		return -EINVAL;
+
+	dwc3_device_data.dev = dev;
+
+	return 0;
+}
+
 int board_usb_init(int index, enum usb_init_type init)
 {
 	return dwc3_uboot_init(&dwc3_device_data);
 }
-#endif

@@ -27,6 +27,15 @@ struct ums {
 	struct blk_desc block_dev;
 };
 
+extern struct usb_endpoint_descriptor fsg_fs_bulk_in_desc;
+extern struct usb_endpoint_descriptor fsg_fs_bulk_out_desc;
+extern struct usb_endpoint_descriptor fsg_hs_bulk_in_desc;
+extern struct usb_endpoint_descriptor fsg_hs_bulk_out_desc;
+extern struct usb_endpoint_descriptor fsg_ss_bulk_in_desc;
+extern struct usb_ss_ep_comp_descriptor fsg_ss_bulk_in_comp_desc;
+extern struct usb_endpoint_descriptor fsg_ss_bulk_out_desc;
+extern struct usb_ss_ep_comp_descriptor fsg_ss_bulk_out_comp_desc;
+
 int fsg_init(struct ums *ums_devs, int count, struct udevice *udc);
 void fsg_cleanup(void);
 int fsg_main_thread(void *);

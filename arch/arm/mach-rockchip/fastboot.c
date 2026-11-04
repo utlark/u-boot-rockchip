@@ -123,7 +123,7 @@ static void oem_permanent_attributes(char *response)
 
 static void oem_permanent_attributes_rsa_cer(char *response)
 {
-	u32 image_size = env_get_hex("filesize", 0);
+	u32 __maybe_unused image_size = env_get_hex("filesize", 0);
 
 #ifdef CONFIG_LIBAVB_USER
 	if (image_size != 256) {

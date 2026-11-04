@@ -209,6 +209,11 @@ config USB_FUNCTION_ROCKUSB
           the rockusb gadget.for more detail about Rockusb protocol, please see
           doc/README.rockusb
 
+config ROCKUSB_G_DNL_PID
+	hex "Rockusb gadget loader product ID"
+	depends on USB_FUNCTION_ROCKUSB
+	default 0x5577
+
 config USB_FUNCTION_SDP
 	bool "Enable USB SDP (Serial Download Protocol)"
 	help

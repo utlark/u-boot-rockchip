@@ -36,6 +36,15 @@
 
 DECLARE_GLOBAL_DATA_PTR;
 
+/*
+ * GBL boot flow is not used in this configuration; the reference exists
+ * because the vendor tree provides it from the AVB-user code.
+ */
+bool is_gbl_bootflow(struct blk_desc *dev_desc)
+{
+	return false;
+}
+
 int android_bootloader_message_load(
 	struct blk_desc *dev_desc,
 	const struct disk_partition *part_info,

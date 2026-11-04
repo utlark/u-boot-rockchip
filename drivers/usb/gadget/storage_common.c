@@ -418,7 +418,7 @@ fsg_intf_desc = {
  * interrupt-in.
  */
 
-static struct usb_endpoint_descriptor
+struct usb_endpoint_descriptor
 fsg_fs_bulk_in_desc = {
 	.bLength =		USB_DT_ENDPOINT_SIZE,
 	.bDescriptorType =	USB_DT_ENDPOINT,
@@ -428,7 +428,7 @@ fsg_fs_bulk_in_desc = {
 	/* wMaxPacketSize set by autoconfiguration */
 };
 
-static struct usb_endpoint_descriptor
+struct usb_endpoint_descriptor
 fsg_fs_bulk_out_desc = {
 	.bLength =		USB_DT_ENDPOINT_SIZE,
 	.bDescriptorType =	USB_DT_ENDPOINT,
@@ -480,7 +480,7 @@ static struct usb_descriptor_header *fsg_fs_function[] = {
  * and a "device qualifier" ... plus more construction options
  * for the configuration descriptor.
  */
-static struct usb_endpoint_descriptor
+struct usb_endpoint_descriptor
 fsg_hs_bulk_in_desc = {
 	.bLength =		USB_DT_ENDPOINT_SIZE,
 	.bDescriptorType =	USB_DT_ENDPOINT,
@@ -490,7 +490,7 @@ fsg_hs_bulk_in_desc = {
 	.wMaxPacketSize =	cpu_to_le16(512),
 };
 
-static struct usb_endpoint_descriptor
+struct usb_endpoint_descriptor
 fsg_hs_bulk_out_desc = {
 	.bLength =		USB_DT_ENDPOINT_SIZE,
 	.bDescriptorType =	USB_DT_ENDPOINT,
@@ -535,7 +535,7 @@ static struct usb_descriptor_header *fsg_hs_function[] = {
 	NULL,
 };
 
-static struct usb_endpoint_descriptor
+struct usb_endpoint_descriptor
 fsg_ss_bulk_in_desc = {
 	.bLength =		USB_DT_ENDPOINT_SIZE,
 	.bDescriptorType =	USB_DT_ENDPOINT,
@@ -545,14 +545,14 @@ fsg_ss_bulk_in_desc = {
 	.wMaxPacketSize =	cpu_to_le16(1024),
 };
 
-static struct usb_ss_ep_comp_descriptor
+struct usb_ss_ep_comp_descriptor
 fsg_ss_bulk_in_comp_desc = {
 	.bLength		= sizeof(fsg_ss_bulk_in_comp_desc),
 	.bDescriptorType	= USB_DT_SS_ENDPOINT_COMP,
 	/* .bMaxBurst		= DYNAMIC, */
 };
 
-static struct usb_endpoint_descriptor
+struct usb_endpoint_descriptor
 fsg_ss_bulk_out_desc = {
 	.bLength =		USB_DT_ENDPOINT_SIZE,
 	.bDescriptorType =	USB_DT_ENDPOINT,
@@ -562,7 +562,7 @@ fsg_ss_bulk_out_desc = {
 	.wMaxPacketSize =	cpu_to_le16(1024),
 };
 
-static struct usb_ss_ep_comp_descriptor
+struct usb_ss_ep_comp_descriptor
 fsg_ss_bulk_out_comp_desc = {
 	.bLength		= sizeof(fsg_ss_bulk_out_comp_desc),
 	.bDescriptorType	= USB_DT_SS_ENDPOINT_COMP,

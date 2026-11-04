@@ -39,7 +39,9 @@ static void getvar_slot_successful(char *var_parameter, char *response);
 static void getvar_slot_unbootable(char *var_parameter, char *response);
 static void getvar_slot_retry_count(char *var_parameter, char *response);
 static void getvar_snapshot_update_status(char *var_parameter, char *response);
+#ifdef CONFIG_LIBAVB_USER
 static void getvar_avb_state(char *var_parameter, char *response);
+#endif
 
 static const struct {
 	const char *variable;
@@ -148,10 +150,12 @@ static const struct {
 		.variable = "snapshot-update-status",
 		.dispatch = getvar_snapshot_update_status,
 		.list = true
+#ifdef CONFIG_LIBAVB_USER
 	}, {
 		.variable = "avb-state",
 		.dispatch = getvar_avb_state,
 		.list = true
+#endif
 	}
 };
 
@@ -348,7 +352,7 @@ static void __maybe_unused getvar_erase_blocksize(char *var_parameter, char *res
 
 static void __maybe_unused getvar_vboot_state(char *var_parameter, char *response)
 {
-	uint8_t vboot_flag = 0;
+	uint8_t __maybe_unused vboot_flag = 0;
 
 #ifdef CONFIG_OPTEE
 	if (optee_read_vbootkey_enable_flag(&vboot_flag)) {
@@ -564,6 +568,7 @@ static void getvar_snapshot_update_status(char *var_parameter, char *response)
 		fastboot_okay("None", response);
 }
 
+#ifdef CONFIG_LIBAVB_USER
 static void __maybe_unused getvar_avb_state(char *var_parameter, char *response)
 {
 	char vbst[AVB_STATE_SIZE] = {0};
@@ -577,6 +582,7 @@ static void __maybe_unused getvar_avb_state(char *var_parameter, char *response)
 			fastboot_response("OKAY", response, "%s", var_parameter);
 	} while (strlen(var_parameter));
 }
+#endif /* CONFIG_LIBAVB_USER */
 
 static int current_all_dispatch;
 void fastboot_getvar_all(char *response)

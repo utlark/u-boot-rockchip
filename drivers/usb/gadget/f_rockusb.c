@@ -14,6 +14,7 @@
 #include <misc.h>
 #include <mmc.h>
 #include <linux/mtd/mtd.h>
+#include <linux/types.h>
 #include <rockusb.h>
 #include <scsi.h>
 #include <write_keybox.h>
