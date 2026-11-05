@@ -59,7 +59,7 @@ static int read_rockchip_image(struct blk_desc *dev_desc,
 	if (ret != cnt)
 		return -EIO;
 
-	memcpy(dst, dst + 8, img->size);
+	memmove(dst, dst + 8, img->size);
 
 	return img->size;
 }
@@ -97,7 +97,8 @@ int do_bootrk(struct cmd_tbl *cmdtp, int flag, int argc, char *const argv[])
 
 	/* ramdisk is optional (boot partition, same rockchip format) */
 	ramdisk_size = 0;
-	if (!part_get_info_by_name(dev_desc, PART_BOOT, &boot_part)) {
+	if (ramdisk_addr_r &&
+	    !part_get_info_by_name(dev_desc, PART_BOOT, &boot_part)) {
 		ramdisk_size = read_rockchip_image(dev_desc, &boot_part,
 						   (void *)ramdisk_addr_r);
 		if (ramdisk_size < 0)
