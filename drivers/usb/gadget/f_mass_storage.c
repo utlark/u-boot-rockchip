@@ -2454,8 +2454,31 @@ int fsg_main_thread(void *common_)
 		}
 
 		ret = get_next_command(common);
-		if (ret)
+		if (ret) {
+			/*
+			 * Ctrl+C/eject (-EPIPE), the USB3 fallback
+			 * (-ENODEV) and the cable check (-EIO) are
+			 * handled by run_rockusb(): let them through.
+			 *
+			 * Any other failure is a bad/short CBW.  This
+			 * 2017-era fsg port used to treat that as
+			 * fatal, but a USB cable disconnect completes
+			 * the pending CBW request with an error
+			 * status, which then reads back as an invalid
+			 * CBW and killed the download session.  Reset
+			 * the fsg state and keep waiting: when the
+			 * host reconnects it issues a USB reset
+			 * (FSG_STATE_RESET) and re-enumerates, so the
+			 * session must stay alive.
+			 */
+			if (ret != -EPIPE && ret != -ENODEV && ret != -EIO) {
+				printf("rockusb: bad CBW (%d), "
+				       "resetting state\n", ret);
+				handle_exception(common);
+				continue;
+			}
 			return ret;
+		}
 
 		if (!exception_in_progress(common))
 			common->state = FSG_STATE_DATA_PHASE;
