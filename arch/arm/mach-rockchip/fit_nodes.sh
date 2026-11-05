@@ -166,6 +166,11 @@ function gen_elf_nodes()
 	esac
 
 	rm -f ${srctree}/${TYPE}_0x*.bin
+	# The prebuilt firmware is shipped as .bin, not .elf; skip the
+	# ELF decode (and its python traceback) when there is no ELF
+	if [ ! -f ${srctree}/${TYPE}.elf ]; then
+		return 1
+	fi
 	${srctree}/arch/arm/mach-rockchip/decode_elf.py ${TYPE} || return 1
 	FILES=`ls -1 -S ${TYPE}_0x*.bin` || return 1
 
