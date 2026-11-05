@@ -227,10 +227,11 @@ int run_rockusb(const char *usb_controller, const char *devtype, const char *dev
 	int cable_ready_timeout __maybe_unused;
 	const char *s;
 
-	if (!strcmp(devtype, "mmc") && !strcmp(devnum, "1")) {
-		pr_err("Forbid to flash mmc 1(sdcard)\n");
-		return CMD_RET_FAILURE;
-	}
+	/*
+	 * Upstream rejects "rockusb 0 mmc 1" (sdcard) here. This board
+	 * boots from the SD card (mmc 1), so the rockusb gadget is the
+	 * only way to reflash it over USB: allow it.
+	 */
 
 	g_rkusb = &rkusb;
 	rc = rkusb_init(devtype, devnum);
