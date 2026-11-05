@@ -71,9 +71,24 @@ CONFIG_CMD_ROCKUSB=y
 CONFIG_ANDROID_BOOT_IMAGE=y
 # CONFIG_FASTBOOT_OEM_BOARD_UNLOCK is not set
 CONFIG_FASTBOOT_BUF_ADDR=0x04000000
+# RSA must stay on: the RSA_N/E/C_SIZE options live in an "if RSA"
+# Kconfig block and are dropped from a regenerated config otherwise,
+# which breaks the host build of mkimage's signing support
+# (tools/generated/lib/rsa/rsa-sign.c needs the size macros).
+CONFIG_RSA=y
 CONFIG_RSA_N_SIZE=0x200
 CONFIG_RSA_E_SIZE=0x10
 CONFIG_RSA_C_SIZE=0x20
 CONFIG_DM_HASH=y
 CONFIG_HASH_SOFTWARE=y
+# SPL: image-fit.c (SPL_LOAD_FIT) calls the DM hash API (hash-uclass),
+# which lives in drivers/crypto/. In the SPL phase that directory is
+# only built when SPL_CRYPTO is on; previously it was pulled in only
+# indirectly via SPL_FIT_SIGNATURE (select SPL_CRYPTO), which is off
+# here. Without it the SPL link fails with undefined hash_* symbols.
+CONFIG_SPL_CRYPTO=y
+# SPL: drivers/crypto/rsa_mod_exp (built unconditionally once crypto/ is
+# in the SPL) calls rsa_mod_exp_sw() from lib/rsa/; lib/rsa/ enters the
+# SPL only with SPL_RSA, previously implied by SPL_FIT_SIGNATURE
+CONFIG_SPL_RSA=y
 # CONFIG_ANDROID_AB is not set
