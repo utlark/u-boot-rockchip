@@ -90,6 +90,48 @@ static int bootdev_do_probe(const char *devtype, const char *devnum)
 	return 0;
 }
 
+/*
+ * sd_bootdev_probe() - Test whether the SD card (mmc 1) carries a rockchip
+ * image: an IDB (idbloader) at sector 64, exactly like the "rkimgtest"
+ * command does.
+ *
+ * Used to boot from the SD card whenever it contains a bootable image,
+ * independently of the device the pre-loader actually booted from.
+ */
+static int sd_bootdev_probe(char **devtype, char **devnum)
+{
+	struct blk_desc *desc;
+	u32 *buffer;
+	bool found = false;
+
+	if (bootdev_do_probe("mmc", "1"))
+		return -ENODEV;
+
+	desc = blk_get_devnum_by_uclass_idname("mmc", 1);
+	if (!desc)
+		return -ENODEV;
+
+	/* read the first two sectors of the IDB data area */
+	buffer = memalign(ARCH_DMA_MINALIGN, 1024);
+	if (!buffer)
+		return -ENOMEM;
+
+	if (blk_dread(desc, 64, 2, buffer) == 2 &&
+	    (buffer[0] == 0xFCDC8C3B || buffer[0] == 0x534e4b52 ||
+	     buffer[0] == 0x534e5252))
+		found = true;
+
+	free(buffer);
+
+	if (!found)
+		return -EINVAL;
+
+	*devtype = "mmc";
+	*devnum = "1";
+
+	return 0;
+}
+
 static void assign_bootdev_set_iomux(char *s_devtype, char *s_devnum,
 				      char *s_routing)
 {
@@ -107,7 +149,7 @@ static void assign_bootdev_set_iomux(char *s_devtype, char *s_devnum,
 }
 
 /*
- * Priority: configuration > atags.
+ * Priority: configuration > sdcard > atags.
  */
 static int bootdev_probe(void)
 {
@@ -126,6 +168,12 @@ static int bootdev_probe(void)
 		}
 	}
 #endif
+	/* SD card first, when enabled */
+	if (IS_ENABLED(CONFIG_ROCKCHIP_BOOTDEV_SD_FIRST) &&
+	    !sd_bootdev_probe(&devtype, &devnum)) {
+		src = "sdcard";
+		goto finish;
+	}
 	/* atags */
 #ifdef CONFIG_ROCKCHIP_PRELOADER_ATAGS
 	if (!param_parse_atags_bootdev(&devtype, &devnum)) {

@@ -11,6 +11,19 @@ config ROCKCHIP_BOOTDEV
 	string "Set the boot device for multiple storage board"
 	default ""
 
+config ROCKCHIP_BOOTDEV_SD_FIRST
+	bool "Boot from the SD card first when it carries a rockchip image"
+	depends on MMC
+	help
+	  Before falling back to the pre-loader boot device (atags), test
+	  whether the SD card (mmc 1) carries a rockchip image (an IDB at
+	  sector 64, the same test the "rkimgtest" command performs). If it
+	  does, the SD card becomes the boot device, so kernel, resource and
+	  rootfs are all taken from it. When the card is absent or not
+	  bootable, the pre-loader boot device (usually eMMC) is used.
+	  Explicitly configured boot devices (ROCKCHIP_BOOTDEV) keep the
+	  highest priority.
+
 config ROCKCHIP_FIT_IMAGE
 	bool "Rockchip FIT image boot support"
 	depends on FIT

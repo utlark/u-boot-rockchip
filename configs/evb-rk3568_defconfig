@@ -92,3 +92,5 @@ CONFIG_SPL_CRYPTO=y
 # SPL only with SPL_RSA, previously implied by SPL_FIT_SIGNATURE
 CONFIG_SPL_RSA=y
 # CONFIG_ANDROID_AB is not set
+# MCP905: boot from the SD card first when it carries a rockchip image
+CONFIG_ROCKCHIP_BOOTDEV_SD_FIRST=y
